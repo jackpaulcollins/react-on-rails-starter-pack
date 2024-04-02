@@ -1,5 +1,5 @@
 import { useEffect, useState, React } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Navbar from '../../components/nav/NavBar';
 import { useAuthContext } from '../../contexts/AuthContext';
 import FullScreenLoading from '../../components/generic/FullScreenLoading';
@@ -10,6 +10,7 @@ function ProtectedRoute({ children }) {
   const { dispatch } = useAuthContext();
   const { user } = useAuthContext();
   const location = useLocation();
+  const navigate = useNavigate();
   const { pathname } = location;
 
   useEffect(() => {
@@ -22,13 +23,15 @@ function ProtectedRoute({ children }) {
         dispatch({ type: 'SET_USER', payload: user });
         setLoading(false);
       })
-      .catch(() => {
-        <Navigate to="/login" />;
-      });
+      .catch(() => navigate('/login'));
   }, [dispatch, pathname]);
 
+  if (loading) {
+    return <FullScreenLoading />;
+  }
+
   if (!loading && !user) {
-    return <Navigate to="/login" />;
+    return navigate('/login');
   }
 
   return (
