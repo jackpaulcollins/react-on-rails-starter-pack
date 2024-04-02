@@ -42,6 +42,8 @@ Featuring:
 
 # Deployment
 
+*note: before deployment you'll need to configure CORS to allow the API to allow requests from the origin of your front end. Add your front end domain to config/initializers/cors.rb:10, and add it is as your production baseUrl in client/src/api/Api.jsx*
+
 With some minor configuration this app is ready to deploy. For ease of use I recommend deploying the client to [netlify](https://www.netlify.com/), and the rails applicaton to [render](https://render.com/). Both of these services offer a free tier (although I believe you may need to pay for a database on render).
 
 To deploy the client to Netlify simply create a new app and configure the deploy/build to use the client directory:
