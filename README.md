@@ -28,7 +28,7 @@ Featuring:
 
 1.) Clone the repo
 
-2.) from the root (or `/app`) directory run `bundle install; rails db:create && rails db:migrate`
+2.) from the root (or `/app`) directory run `bundle install && rails db:create && rails db:migrate`
 
 3.) Create a .env file in the root of the application and add the following:
 
