@@ -1,5 +1,3 @@
-# README
-
 ## Starter pack for a [Ruby on Rails](https://rubyonrails.org/) API and [ReactJS](https://react.dev/) Frontend.
 
 Featuring:
