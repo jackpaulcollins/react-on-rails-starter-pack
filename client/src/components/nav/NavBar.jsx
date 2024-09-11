@@ -79,11 +79,11 @@ function NavBar() {
                   <Link to="/" className={activeLink('/')}>
                     Dashboard
                   </Link>
-                  <Link to="/jobs" className={activeLink('/jobs')}>
-                    Jobs
+                  <Link to="/plans" className={activeLink('/plans')}>
+                    Plans
                   </Link>
-                  <Link to="/team" className={activeLink('/team')}>
-                    Team
+                  <Link to="/exercises" className={activeLink('/exercises')}>
+                    Exercises
                   </Link>
                   <Link to="/templates" className={activeLink('/templates')}>
                     Templates
@@ -191,12 +191,12 @@ function NavBar() {
                 </Disclosure.Button>
               </Link>
 
-              <Link to="/jobs">
+              <Link to="/plans">
                 <Disclosure.Button
                   as="span"
-                  className={activeMobileLink('/jobs')}
+                  className={activeMobileLink('/plans')}
                 >
-                  Jobs
+                  Plans
                 </Disclosure.Button>
               </Link>
 

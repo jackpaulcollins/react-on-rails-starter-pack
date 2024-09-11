@@ -1,44 +1,56 @@
-import { useEffect, useState, React } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { React, useEffect, useState } from 'react';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import Navbar from '../../components/nav/NavBar';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { exchange } from '../../api/Api';
 import FullScreenLoading from '../../components/generic/FullScreenLoading';
-import Api from '../../api/Api';
 
-function ProtectedRoute({ children }) {
+function ProtectedRoute() {
   const [loading, setLoading] = useState(true);
-  const { dispatch } = useAuthContext();
-  const { user } = useAuthContext();
+  const [isLoggedIn, setisLoggedIn] = useState(false);
+
+  const { user, dispatch } = useAuthContext();
   const location = useLocation();
-  const navigate = useNavigate();
   const { pathname } = location;
 
-  useEffect(() => {
-    setLoading(true);
+  const maybeHydrateUser = async () => {
+    try {
+      const refreshedUser = await exchange();
 
-    Api.post('/exchange')
-      .then((response) => {
-        // eslint-disable-next-line no-shadow
-        const { user } = response.data;
-        dispatch({ type: 'SET_USER', payload: user });
-        setLoading(false);
-      })
-      .catch(() => navigate('/login'));
-  }, [dispatch, pathname]);
+      if (refreshedUser) {
+        dispatch({ type: 'SET_USER', payload: refreshedUser });
+        setisLoggedIn(true);
+      } else {
+        setisLoggedIn(false);
+      }
+    } catch (error) {
+      console.error('Failed to refresh user:', error);
+      setisLoggedIn(false);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!user) {
+      maybeHydrateUser();
+    } else {
+      setisLoggedIn(true);
+      setLoading(false);
+    }
+  }, [user, pathname]);
 
   if (loading) {
     return <FullScreenLoading />;
   }
 
-  if (!loading && !user) {
-    return navigate('/login');
-  }
-
-  return (
+  return isLoggedIn ? (
     <>
       <Navbar />
-      {loading ? <FullScreenLoading /> : children}
+      <Outlet />
     </>
+  ) : (
+    <Navigate to="/login" />
   );
 }
 

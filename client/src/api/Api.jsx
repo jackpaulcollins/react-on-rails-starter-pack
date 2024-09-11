@@ -3,10 +3,13 @@ import axios from 'axios';
 export const TOKEN = 'jwt-token';
 export const REFRESH_TOKEN = 'jwt-refresh-token';
 
-const baseURL = process.env.NODE_ENV === 'production' ? 'your-front-end-domain' : 'http://localhost:3000/api/v1/';
-const Api = axios.create({
-  baseURL,
-});
+// eslint-disable-next-line operator-linebreak
+const baseURL =
+  process.env.NODE_ENV === 'production'
+    ? 'your-front-end-domain'
+    : 'http://localhost:3000/api/v1/';
+
+const Api = axios.create({ baseURL });
 
 export const getToken = (key) => localStorage.getItem(key);
 
@@ -16,6 +19,13 @@ export const setToken = (key, token) => {
 
 export const clearToken = (key) => {
   localStorage.removeItem(key);
+};
+
+export const exchange = async () => {
+  const data = await Api.post('/exchange', { refresh_token: getToken(TOKEN) });
+  const { user } = data.data;
+
+  return { hydratedUser: user };
 };
 
 const attemptRefresh = (error) => {
@@ -39,6 +49,7 @@ const attemptRefresh = (error) => {
       clearToken(TOKEN);
       clearToken(REFRESH_TOKEN);
       window.location.href = '/login';
+      return Promise.reject(error);
     });
 };
 
@@ -52,7 +63,8 @@ Api.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error),
+  // eslint-disable-next-line comma-dangle
+  (error) => Promise.reject(error)
 );
 
 Api.interceptors.response.use(
@@ -60,10 +72,11 @@ Api.interceptors.response.use(
   async (error) => {
     const { data, status } = error.response;
     if (status === 401 && data.message === 'token expired') {
-      attemptRefresh(error);
+      // eslint-disable-next-line no-return-await
+      return await attemptRefresh(error);
     }
     return Promise.reject(error);
-  },
+  }
 );
 
 export default Api;

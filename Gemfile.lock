@@ -100,7 +100,6 @@ GEM
     jsonapi-renderer (0.2.2)
     jwt (2.8.1)
       base64
-    language_server-protocol (3.17.0.3)
     loofah (2.22.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -197,14 +196,7 @@ GEM
       unicode-display_width (>= 2.4.0, < 3.0)
     rubocop-ast (1.31.2)
       parser (>= 3.3.0.4)
-    rubocop-performance (1.16.0)
-      rubocop (>= 1.7.0, < 2.0)
-      rubocop-ast (>= 0.4.0)
     ruby-progressbar (1.13.0)
-    standard (1.26.0)
-      language_server-protocol (~> 3.17.0.2)
-      rubocop (~> 1.48.1)
-      rubocop-performance (~> 1.16.0)
     stringio (3.1.0)
     subroutine (3.0.1)
       activemodel (>= 6.1)
@@ -236,12 +228,12 @@ DEPENDENCIES
   puma (~> 5.0)
   rack-cors
   rails (~> 7.0.8)
-  standard
+  rubocop
   subroutine
   tzinfo-data
 
 RUBY VERSION
-   ruby 3.1.2p20
+   ruby 3.3.5p100
 
 BUNDLED WITH
    2.4.13

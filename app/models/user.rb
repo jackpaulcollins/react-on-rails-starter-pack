@@ -15,6 +15,8 @@ class User < ApplicationRecord
     (?=.*[[:^alnum:]]) # Must contain a symbol
   /x
 
+  has_many :plans, foreign_key: :created_by_id
+
   def validate_time_zone
     ActiveSupport::TimeZone.find_tzinfo(time_zone)
     # recure here so we can call valid? without raising

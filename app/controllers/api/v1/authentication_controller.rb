@@ -14,10 +14,10 @@ module Api
           token = user.generate_jwt_token
           refresh_token = user.generate_jwt_refresh_token
 
-          render json: {user: UserSerializer.new(user).to_hash, token:, refresh_token:},
-            status: :ok
+          render json: { user: UserSerializer.new(user).to_hash, token:, refresh_token: },
+                 status: :ok
         else
-          render json: {errors: op.errors.full_messages}, status: :unauthorized
+          render json: { errors: op.errors.full_messages }, status: :unauthorized
         end
       end
 
@@ -25,18 +25,18 @@ module Api
         token = extract_token_from_header
 
         if token.present?
-          user = Authentication::JwtExchangeOp.submit!(token: extract_token_from_header).user
+          user = Authentication::JwtExchangeOp.submit!(token:).user
 
           if user.present?
-            render json: {user: UserSerializer.new(user).to_hash}, status: :ok
+            render json: { user: UserSerializer.new(user).to_hash }, status: :ok
           else
             render json: {}, status: :unauthorized
           end
         else
-          render json: {message: "token expired"}, status: :unauthorized
+          render json: { message: 'token expired' }, status: :unauthorized
         end
       rescue JWT::ExpiredSignature
-        render json: {message: "token expired"}, status: :unauthorized
+        render json: { message: 'token expired' }, status: :unauthorized
       end
 
       def refresh
@@ -46,24 +46,14 @@ module Api
           if user.present?
             token = user.generate_jwt_token
 
-            render json: {user: UserSerializer.new(user).to_hash, token:},
-              status: :ok
+            render json: { user: UserSerializer.new(user).to_hash, token: },
+                   status: :ok
           else
             render json: {}, status: :unauthorized
           end
         else
           render json: {}, status: :unauthorized
         end
-      end
-
-      private
-
-      def extract_token_from_header
-        authorization_header = request.headers["Authorization"]
-
-        return unless authorization_header&.match(/^Bearer /)
-
-        authorization_header.sub(/^Bearer /, "")
       end
     end
   end

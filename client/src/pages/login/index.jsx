@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Formik, Field, ErrorMessage } from 'formik';
 import PublicApi from '../../api/PublicApi';
+import { useAuthContext } from '../../contexts/AuthContext';
 import { TOKEN, REFRESH_TOKEN, setToken } from '../../api/Api';
 import loginSchema from '../../yup/login';
 
@@ -32,12 +33,13 @@ const styles = {
 function Login() {
   const navigate = useNavigate();
   const [errors, setErrors] = useState(null);
+  const { dispatch } = useAuthContext();
 
   const submit = async (values) => {
     try {
       const response = await PublicApi.post('/login', { ...values });
 
-      const { token, refresh_token } = response.data;
+      const { token, refresh_token, user } = response.data;
 
       if (token) {
         setToken(TOKEN, token);
@@ -46,6 +48,7 @@ function Login() {
           setToken(REFRESH_TOKEN, refresh_token);
         }
 
+        dispatch({ type: 'SET_USER', payload: user });
         navigate('/');
       }
     } catch (e) {
@@ -125,7 +128,10 @@ function Login() {
               )}
             </Formik>
             {errors
-              && errors.map((error) => <div className="text-red-500 text-sm">{error}</div>)}
+              ? errors.map((error) => (
+                  <div className="text-red-500 text-sm">{error}</div>
+                ))
+              : null}
             <div className="text-sm leading-6">
               <Link
                 to="/register"

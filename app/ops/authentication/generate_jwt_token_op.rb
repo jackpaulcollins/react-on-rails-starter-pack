@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "subroutine/association_fields"
+require 'subroutine/association_fields'
 
 module Authentication
   # generates a JWT token for a user.
@@ -22,9 +22,9 @@ module Authentication
     private
 
     def generate_jwt_token(user)
-      exp_payload = {data: user.id, exp: expiry_time}
-      s = ENV["JWT_SECRET_KEY"]
-      a = ENV["JWT_ALGORITHM"]
+      exp_payload = { data: user.id, exp: expiry_time }
+      s = ENV['JWT_SECRET_KEY']
+      a = ENV['JWT_ALGORITHM']
       JWT.encode exp_payload, s, a
     end
 

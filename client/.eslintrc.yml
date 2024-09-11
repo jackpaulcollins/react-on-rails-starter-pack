@@ -10,7 +10,13 @@ parserOptions:
   sourceType: module
 plugins:
   - react
-rules: {
-  "jsx-a11y/label-has-associated-control": off,
-  "react/prop-types": off,
-}
+rules:
+  {
+    'jsx-a11y/label-has-associated-control': off,
+    'react/prop-types': off,
+    'comma-dangle': off,
+    'react/jsx-wrap-multilines': off,
+    'object-curly-newline': off,
+    'react/jsx-indent': off,
+    'indent': off,
+  }
